@@ -1,7 +1,16 @@
 package part3;
 
+/**
+ * Record для объектов Student
+ *
+ * @param id - Идентификатор
+ * @param name - Имя
+ * @param grade - Отметка
+ */
 public record Student(int id, String name, double grade) {
-
+    /**
+     * Конструктор с проверками валидности данных
+     */
     public Student {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive");

@@ -2,8 +2,18 @@ package part3;
 
 import java.util.*;
 
+/**
+ * Класс, реализующий методы из задания
+ */
 public class Students {
-
+    /**
+     * Метод, возвращающий список студентов, отметки которых находятся в границах от {@code minGrade} до {@code maxGrade}
+     *
+     * @param students Map студентов
+     * @param minGrade Нижняя грань отметок
+     * @param maxGrade Верхняя грань отметок
+     * @return список учеников, подходящих под критерии
+     */
     public static List<Student> findStudentsByGradeRange(Map<Integer, Student> students, double minGrade, double maxGrade) {
         if (minGrade > maxGrade) {
             throw new IllegalArgumentException("min must be <= max");
@@ -22,6 +32,12 @@ public class Students {
         return studentsList;
     }
 
+    /**
+     * Метод, выводящий топ N студентов по Идентификатору
+     * @param students Map студентов
+     * @param n
+     * @return Список студентов, подходящих под критерии
+     */
     public static List<Student> getTopNStudentsById(NavigableMap<Integer, Student> students, int n) {
         if (n < 0) {
             throw new IllegalArgumentException("n must be > 0");
@@ -34,6 +50,4 @@ public class Students {
         }
         return studentList;
     }
-
-
 }

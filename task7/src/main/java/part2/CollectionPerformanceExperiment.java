@@ -5,13 +5,15 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Реализация эксперимента по заданию 2.
+ */
 public class CollectionPerformanceExperiment {
 
     // константы, можно поменять, если хочется повысить точность
     private static final int N = 10_000;
     private static final int WARMUP_RUNS = 3;
     private static final int MEASURE_RUNS = 7;
-
 
     private static long checksum = 0;
 
@@ -24,7 +26,10 @@ public class CollectionPerformanceExperiment {
             "Удаление с конца"
     };
 
-    // красивый вывод с одинаковыми по ширине столбцами
+    /**
+     * Точка входа, вывод таблицы с результатами эксперимента.
+     *
+     */
     public static void main(String[] args) {
         System.out.printf("%-22s %10s %16s %16s%n",
                 "Операция", "Элементов", "ArrayList, мкс", "LinkedList, мкс");
@@ -38,6 +43,12 @@ public class CollectionPerformanceExperiment {
         System.out.println("Контрольная сумма: " + checksum);
     }
 
+    /**
+     * Создание нового списка.
+     *
+     * @param linked {@code true} - LinkedList, {@code false} - ArrayList
+     * @return список
+     */
     private static List<Integer> newList(boolean linked) {
         if (linked) {
             return new LinkedList<>();
@@ -45,14 +56,25 @@ public class CollectionPerformanceExperiment {
         return new ArrayList<>();
     }
 
+    /**
+     * Заполнение списка на {@code N} значений.
+     *
+     * @param list список, в который добавляются элементы
+     */
     private static void fill(List<Integer> list) {
         for (int i = 0; i < N; i++) {
             list.add(i);
         }
     }
 
-
-    // первые несколько вызовов не идут в подсчет, так как JIT должен разогнатся (оптимизировать код)
+    /**
+     * Подсчет времени работы: первые несколько проходов не считаются,
+     * после "разгона" считаются следующие несколько проходов, находится медиана.
+     *
+     * @param op тип прохода
+     * @param linked список, участвующий в проходе
+     * @return медиана времени работы
+     */
     private static long measure(int op, boolean linked) {
         for (int i = 0; i < WARMUP_RUNS; i++) {
             run(op, linked);
@@ -65,6 +87,13 @@ public class CollectionPerformanceExperiment {
         return times[MEASURE_RUNS / 2];
     }
 
+    /**
+     * Проход теста.
+     *
+     * @param op     тип прохода
+     * @param linked список, участвующий в проходе
+     * @return время прохода (одного)
+     */
     private static long run(int op, boolean linked) {
         switch (op) {
             case 0: return addToEnd(newList(linked));
@@ -77,6 +106,12 @@ public class CollectionPerformanceExperiment {
         }
     }
 
+    /**
+     * Добавление элементов в конец списка.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long addToEnd(List<Integer> list) {
         long start = System.nanoTime();
         for (int i = 0; i < N; i++) {
@@ -88,6 +123,12 @@ public class CollectionPerformanceExperiment {
         return worktime;
     }
 
+    /**
+     * Добавление элементов в начало списка.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long addToStart(List<Integer> list) {
         long start = System.nanoTime();
         for (int i = 0; i < N; i++) {
@@ -99,6 +140,12 @@ public class CollectionPerformanceExperiment {
         return elapsed;
     }
 
+    /**
+     * Добавление элементов в середину списка.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long insertInMiddle(List<Integer> list) {
         fill(list); // подготовка, не в замере
 
@@ -112,6 +159,12 @@ public class CollectionPerformanceExperiment {
         return elapsed;
     }
 
+    /**
+     * Получение элементов списка по индексу.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long accessByIndex(List<Integer> list) {
         fill(list);
 
@@ -126,6 +179,12 @@ public class CollectionPerformanceExperiment {
         return elapsed;
     }
 
+    /**
+     * Удаление элементов из начала списка.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long removeFromStart(List<Integer> list) {
         fill(list);
 
@@ -140,6 +199,12 @@ public class CollectionPerformanceExperiment {
         return elapsed;
     }
 
+    /**
+     * Удаление элементов из конца списка.
+     *
+     * @param list список, участвующий в тесте
+     * @return время прохода
+     */
     private static long removeFromEnd(List<Integer> list) {
         fill(list);
 
